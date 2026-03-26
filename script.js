@@ -5,6 +5,8 @@ let operador = true;
 
 let punto = true
 
+let igual = true;
+
 let resultados = []
 
 let operacion = []
@@ -35,45 +37,50 @@ function actualizarEstado() {
 }
 
 function handleClick(number){
-        console.log(number)
+
         fullOp = fullOp + number;
         shownumber(fullOp)
         bloqueado = true
          actualizarEstado()
+
 }
 
 function handleClick_dot(number){
     if(punto == true){
-        console.log(number)
+
         fullOp = fullOp + number;
         shownumber(fullOp)
         punto = false;
         bloqueado = true
          actualizarEstado()
+
     }
 }
 
 function handleClickoperator(op){
     if (operador){
-        console.log(fullOp)
+
         fullOp = fullOp + op;
         shownumber(fullOp)
         operador = false;
         punto = true;
         bloqueado = true
-         actualizarEstado()
+        actualizarEstado()
+
     }
 }
 
 function borrar(){
-    console.log('')
+
     shownumber('')
     fullOp = '';
     operador=true;
     punto = true;
     showresult("")
     bloqueado = false
+
      actualizarEstado()
+
 }
 
 function borraruno(){
@@ -81,51 +88,72 @@ function borraruno(){
     shownumber(fullOp)
     operador = true;
     punto = true
+
 }
 
 function calculate(){
-    const operacionCompleta = fullOp; // guardamos la operación antes de cambiar fullOp
-    operacion.push(operacionCompleta);
-    localStorage.setItem("operacion", JSON.stringify(operacion));
-    const [a,op,b] = fullOp.split(/(\+|-|\*|\/|\^)/gm);
-        console.log({a,op,b});
-   
+
+    const [a, op, b] = fullOp.split(/(\+|-|\*|\/|\^)/gm);
+
+    if (
+        a !== undefined &&
+        op !== undefined &&
+        b !== undefined &&
+        !isNaN(a) &&
+        !isNaN(b) &&
+        !(op === "/" && Number(b) === 0) // evitar división entre 0
+    ) {
+        igual = true;
+    } else {
+        igual = false;
+    }
+
+    if(igual){
+        const operacionCompleta = fullOp; // guardamos la operación antes de cambiar fullOp
+        operacion.push(operacionCompleta);
+        localStorage.setItem("operacion", JSON.stringify(operacion));
         switch(op){
             case"+":
-                res = Number(a) + Number(b);
-                operador = true;
-                fullOp = res;
+            res = Number(a) + Number(b);
+            res = Number(res.toFixed(5));
+            operador = true;
+            fullOp = res;
             break
-
+            
             case"-":
-                res = Number(a) - Number(b);
-                operador = true;
-                fullOp = res;
+            res = Number(a) - Number(b);
+            res = Number(res.toFixed(5));
+            operador = true;
+            fullOp = res;
             break
-
+            
             case"*":
-                res = Number(a) * Number(b);
-                operador = true;
-                fullOp = res;
+            res = Number(a) * Number(b);
+            res = Number(res.toFixed(5));
+            operador = true;
+            fullOp = res;
             break
-
+            
             case"/":
-                res = Number(a) / Number(b);
-                operador = true;
-                fullOp = res;
+            res = Number(a) / Number(b);
+            res = Number(res.toFixed(5));
+            operador = true;
+            fullOp = res;
             break
-
+            
             case"^":
-                res = Number(a) ** Number(b);
-                operador = true;
-                fullOp = res;
+            res = Number(a) ** Number(b);
+            res = Number(res.toFixed(5));
+            operador = true;
+            fullOp = res;
             break
-
+            
             default:
                 break;
-        }
-        showresult(res)
+            }
+            showresult(res)
 
+    }
 }
 
 function shownumber(n){
@@ -144,4 +172,4 @@ function showresult(n){
 }
 
 
-     actualizarEstado()
+actualizarEstado()
