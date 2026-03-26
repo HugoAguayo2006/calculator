@@ -11,10 +11,12 @@ let operacion = []
 
 let hora = []
 
-let i = 0
-
-
 let bloqueado = false;
+
+resultados = JSON.parse(localStorage.getItem("historial")) || [];
+operacion = JSON.parse(localStorage.getItem("operacion")) || [];
+hora = JSON.parse(localStorage.getItem("hora")) || [];
+
 
 const btn = document.querySelector(".btn-historial");
 
@@ -134,14 +136,11 @@ function showresult(n){
     bloqueado = false
     actualizarEstado()
     document.getElementById("resultado").innerHTML = n
-    resultados[i] = n;
-    console.log(resultados[i]);
+    resultados.push(n);
     localStorage.setItem("historial", JSON.stringify(resultados));
     ahora = new Date();
-    hora[i] = ahora.toLocaleString()
+    hora.push(ahora.toLocaleString())
     localStorage.setItem("hora", JSON.stringify(hora));
-    i ++ ;
-    
 }
 
 
