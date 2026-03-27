@@ -42,6 +42,7 @@ function handleClick(number){
         shownumber(fullOp)
         bloqueado = true
          actualizarEstado()
+         operador = true;
 
 }
 
@@ -59,16 +60,15 @@ function handleClick_dot(number){
 
 function handleClickoperator(op){
     if (operador){
-
         fullOp = fullOp + op;
         shownumber(fullOp)
         operador = false;
         punto = true;
         bloqueado = true
-        actualizarEstado()
-
+        actualizarEstado() 
     }
 }
+
 
 function borrar(){
 
@@ -92,60 +92,63 @@ function borraruno(){
 }
 
 function calculate(){
+    let a, op, b;
+    const match = fullOp.match(/^(-?\d+\.?\d*)([\+\-\*\/\^])(-?\d+\.?\d*)$/);
 
-    const [a, op, b] = fullOp.split(/(\+|-|\*|\/|\^)/gm);
+    if (match) {
+    [, a, op, b] = match;
 
     if (
-        a !== undefined &&
-        op !== undefined &&
-        b !== undefined &&
         !isNaN(a) &&
-        !isNaN(b) &&
-        !(op === "/" && Number(b) === 0) // evitar división entre 0
+        !isNaN(b) 
     ) {
         igual = true;
-    } else {
+      }
+    } 
+    
+    else {
         igual = false;
     }
 
     if(igual){
+        console.log("Entro al if de igual")
         const operacionCompleta = fullOp; // guardamos la operación antes de cambiar fullOp
         operacion.push(operacionCompleta);
         localStorage.setItem("operacion", JSON.stringify(operacion));
         switch(op){
             case"+":
-            res = Number(a) + Number(b);
-            res = Number(res.toFixed(5));
-            operador = true;
-            fullOp = res;
+                res = Number(a) + Number(b);
+                res = Number(res.toFixed(5));
+                operador = true;
+                fullOp = res;
             break
             
             case"-":
-            res = Number(a) - Number(b);
-            res = Number(res.toFixed(5));
-            operador = true;
-            fullOp = res;
+                res = Number(a) - Number(b);
+                res = Number(res.toFixed(5));
+                operador = true;
+                fullOp = res;
             break
             
             case"*":
-            res = Number(a) * Number(b);
-            res = Number(res.toFixed(5));
-            operador = true;
-            fullOp = res;
+                res = Number(a) * Number(b);
+                res = Number(res.toFixed(5));
+                operador = true;
+                fullOp = res;
             break
             
             case"/":
-            res = Number(a) / Number(b);
-            res = Number(res.toFixed(5));
-            operador = true;
-            fullOp = res;
+                res = Number(a) / Number(b);
+                res = Number(res.toFixed(5));
+                operador = true;
+                fullOp = res;
             break
             
             case"^":
-            res = Number(a) ** Number(b);
-            res = Number(res.toFixed(5));
-            operador = true;
-            fullOp = res;
+                res = Number(a) ** Number(b);
+                res = Number(res.toFixed(5));
+                operador = true;
+                fullOp = res;
             break
             
             default:
