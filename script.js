@@ -3,6 +3,8 @@ let fullOp = '';
 
 let operador = true;
 
+let operador_negativo = true;
+
 let punto = true
 
 let igual = true;
@@ -19,8 +21,18 @@ resultados = JSON.parse(localStorage.getItem("historial")) || [];
 operacion = JSON.parse(localStorage.getItem("operacion")) || [];
 hora = JSON.parse(localStorage.getItem("hora")) || [];
 
-
 const btn = document.querySelector(".btn-historial");
+
+
+function regrex() {
+    const numero = "-?(?:\\d+(?:\\.\\d*)?|\\.\\d+)";
+    const match = fullOp.match(new RegExp(`^(${numero})([\\+\\-\\*\\/\\^])(${numero})?$`));
+
+    if (!match) return null;
+
+    const [, a, op, b] = match;
+    return [a, op, b];
+}
 
 function actualizarEstado() {
     const btn = document.getElementById("btnHistorial");
@@ -59,14 +71,39 @@ function handleClick_dot(number){
 }
 
 function handleClickoperator(op){
-    if (operador){
-        fullOp = fullOp + op;
-        shownumber(fullOp)
-        operador = false;
-        punto = true;
-        bloqueado = true
-        actualizarEstado() 
+    const ultimo = String(fullOp).slice(-1);
+    const ultimoEsOperador = /[\+\-\*\/\^]/.test(ultimo);
+
+    // Permitir iniciar con negativo: -5
+    if (fullOp === "") {
+        if (op === "-") {
+            fullOp += op;
+            shownumber(fullOp);
+            bloqueado = true;
+        }
+        actualizarEstado();
+        return;
     }
+
+    // Si ya hay operador al final, solo permitir "-" para negativos como 5*-4
+    if (ultimoEsOperador) {
+        if (op === "-" && /[\+\*\/\^]/.test(ultimo)) {
+            fullOp += op;
+            shownumber(fullOp);
+            bloqueado = true;
+            punto = true;
+        }
+        actualizarEstado();
+        return;
+    }
+
+    fullOp += op;
+    shownumber(fullOp);
+    operador = false;
+    punto = true;
+    bloqueado = true;
+    actualizarEstado();
+
 }
 
 
@@ -76,7 +113,7 @@ function borrar(){
     fullOp = '';
     operador=true;
     punto = true;
-    showresult("")
+    document.getElementById("resultado").innerHTML = "";
     bloqueado = false
 
      actualizarEstado()
@@ -92,8 +129,11 @@ function borraruno(){
 }
 
 function calculate(){
+
     let a, op, b;
-    const match = fullOp.match(/^(-?\d+\.?\d*)([\+\-\*\/\^])(-?\d+\.?\d*)$/);
+
+    const numero = "-?(?:\\d+(?:\\.\\d*)?|\\.\\d+)";
+    const match = fullOp.match(new RegExp(`^(${numero})([\\+\\-\\*\\/\\^])(${numero})$`));
 
     if (match) {
     [, a, op, b] = match;
@@ -111,7 +151,6 @@ function calculate(){
     }
 
     if(igual){
-        console.log("Entro al if de igual")
         const operacionCompleta = fullOp; // guardamos la operación antes de cambiar fullOp
         operacion.push(operacionCompleta);
         localStorage.setItem("operacion", JSON.stringify(operacion));

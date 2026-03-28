@@ -7,10 +7,14 @@ function mostrarhistorial() {
     let contenedor = document.getElementById("cards");
     contenedor.innerHTML = "";
 
-    for (let i = 0; i < resultados.length; i++) {
+    const total = Math.min(resultados.length, operacion.length, hora.length);
+
+    for (let i = 0; i < total; i++) {
         let res = resultados[i];
         let oh = hora[i];
         let op = operacion[i];
+
+        if (res === "" || op === undefined || oh === undefined) continue;
 
 
         let clase = "";
