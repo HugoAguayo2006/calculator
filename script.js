@@ -37,12 +37,11 @@ function regrex() {
 function actualizarEstado() {
     const btn = document.getElementById("btnHistorial");
 
-    // Bloquear o desbloquear según el booleano
+
     btn.disabled = bloqueado;
 
-    // Evento click
     btn.addEventListener("click", () => {
-    if (bloqueado) return; // seguridad
+    if (bloqueado) return; 
 
     window.location.href = "historial.html";
     });
@@ -74,7 +73,7 @@ function handleClickoperator(op){
     const ultimo = String(fullOp).slice(-1);
     const ultimoEsOperador = /[\+\-\*\/\^]/.test(ultimo);
 
-    // Permitir iniciar con negativo: -5
+
     if (fullOp === "") {
         if (op === "-") {
             fullOp += op;
@@ -85,7 +84,6 @@ function handleClickoperator(op){
         return;
     }
 
-    // Si ya hay operador al final, solo permitir "-" para negativos como 5*-4
     if (ultimoEsOperador) {
         if (op === "-" && /[\+\*\/\^]/.test(ultimo)) {
             fullOp += op;
@@ -151,7 +149,7 @@ function calculate(){
     }
 
     if(igual){
-        const operacionCompleta = fullOp; // guardamos la operación antes de cambiar fullOp
+        const operacionCompleta = fullOp; 
         operacion.push(operacionCompleta);
         localStorage.setItem("operacion", JSON.stringify(operacion));
         switch(op){
